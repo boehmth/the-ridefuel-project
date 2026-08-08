@@ -1,0 +1,26 @@
+Entwicklerstufe
+Standardstufe
+Kategorie
+DataImporter
+Club
+Client-ID
+270207
+Geheimer Clientschlüssel
+2ba3f5c49b3e5afeab1acf5f3e352909d2e1c272
+
+Dein Zugriffs-Token
+e062b0490af9cbdd6ba78d5896038e66c9ed1411
+
+Gültigkeitsbereich: read
+
+Ablauf:: 2026-08-06T12:41:51Z
+
+Dein Aktualisierungs-Token
+ec412152f0867a3c090ac3040a384b2f04c97dce
+
+Gültigkeitsbereich: read
+
+Grenzwerte insgesamt
+200 Anfragen im 15-Minuten-Takt, 2.000 täglich
+Grenzwerte Lesen
+100 Anfragen im 15-Minuten-Takt, 1.000 täglich

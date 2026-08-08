@@ -1,0 +1,96 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\thilo\\Source\\TrainingsPlanner']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [10356] using WatchFiles
+INFO:     Started server process [27836]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:62533 - "GET /api/auth/google/auth-url HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "GET /api/auth/google/auth-url HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64669 - "GET /api/auth/google/callback?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0AXEQxIAz_B1noTlRoQf1tiKFI2KFtukvOMRhGqjQY1d7KpIu8CEIQJeChnRjbdX3zbgYnQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64669 - "GET /?code=4/0AXEQxIAz_B1noTlRoQf1tiKFI2KFtukvOMRhGqjQY1d7KpIu8CEIQJeChnRjbdX3zbgYnQ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64669 - "POST /api/auth/google/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64669 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64669 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56454 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56454 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64669 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56454 - "GET /api/meals/date/2026-08-06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59362 - "GET /api/strava/auth-url HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60970 - "GET /api/strava/callback?state=0ce04a29-f958-4372-ba13-23382bc19b4e&code=0503a756efb1d71b8e46e7dad49b28696270b337&scope=read,activity:read_all HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60970 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60970 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60970 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55214 - "GET /api/meals/date/2026-08-06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60970 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55214 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60970 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51349 - "POST /api/activities/sync HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56409 - "GET /api/meals/date/2026-08-06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51349 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50717 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51349 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56409 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50658 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57748 - "GET /api/meals/date/2026-08-06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50658 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57748 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50658 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49187 - "POST /api/auth/logout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /api/auth/google/auth-url HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /api/auth/google/callback?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0AXEQxIAUW1fEpIuHYSfLsLGw9vefA3EcCl2WANH8oL1sGE275k1S-FchGiTbh4d49crsKQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53666 - "GET /?code=4/0AXEQxIAUW1fEpIuHYSfLsLGw9vefA3EcCl2WANH8oL1sGE275k1S-FchGiTbh4d49crsKQ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52195 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "POST /api/auth/google/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /api/meals/date/2026-08-07 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52195 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52195 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63280 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63280 - "GET /styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63393 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63280 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63280 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63280 - "GET /api/auth/google/auth-url HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /api/auth/google/callback?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0AXEQxIB_Rxbz9yPd8bd1RSIzaUH3aF-mpD4JBgQp9Yjjr0Ezu-nz8HSfFWdzapzjAD1yZg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59673 - "GET /?code=4/0AXEQxIB_Rxbz9yPd8bd1RSIzaUH3aF-mpD4JBgQp9Yjjr0Ezu-nz8HSfFWdzapzjAD1yZg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58076 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "POST /api/auth/google/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /api/meals/date/2026-08-08 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58076 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53364 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61843 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59673 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55914 - "POST /api/activities/sync HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55914 - "GET /api/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52960 - "GET /api/meals/date/2026-08-08 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55914 - "GET /api/activities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55914 - "GET /api/strava/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52960 - "GET /api/calendar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55921 - "GET /styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /api/auth/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /api/auth/status HTTP/1.1" 200 OK

@@ -1,0 +1,44 @@
+# === Secrets & Konfiguration ===
+# Lokale Secrets dürfen NIEMALS ins Docker-Image gelangen.
+.env
+.env.*
+!.env.example
+google_secret.json
+strava_key.txt
+
+# === Datenbanken & Daten ===
+# SQLite-Datenbanken und lokale Daten nicht ins Image kopieren.
+data/
+*.db
+*.sqlite3
+*.sqlite
+
+# === Logs ===
+*.log
+server_log.txt
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# === Node / Frontend-Build-Artefakte ===
+node_modules/
+frontend/node_modules/
+
+# === Git & IDE ===
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Sonstiges ===
+product.md
+TODO.md
