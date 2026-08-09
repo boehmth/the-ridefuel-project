@@ -17,14 +17,29 @@ from ..database import (
 )
 from ..meal_service import estimate_meal
 from ..models import Meal, MealEstimate, NewMeal
+from ..timeutil import combine_local_date_time, utc_to_local_naive
+
+
 
 router = APIRouter(prefix="/api/meals", tags=["meals"])
+
+
+def _to_local_naive(meals: list[Meal]) -> list[Meal]:
+    """Konvertiert die Mahlzeiten-Zeitpunkte in lokale Europe/Berlin-Zeit
+    OHNE Offset (naive lokale ISO-Zeit).
+
+    Damit gilt für die API-Ausgabe einheitlich: Das Frontend behandelt naive
+    lokale ISO-Zeiten als reine lokale Darstellung (kein Offset-Shift).
+    """
+    for meal in meals:
+        meal.date = utc_to_local_naive(meal.date)
+    return meals
 
 
 @router.get("", response_model=list[Meal])
 def list_meals(user_id: str = Depends(get_current_user_id)) -> list[Meal]:
     """Liefert alle Mahlzeiten des aktuellen Benutzers."""
-    return get_meals(user_id)
+    return _to_local_naive(get_meals(user_id))
 
 
 @router.get("/date/{date_str}", response_model=list[Meal])
@@ -36,7 +51,11 @@ def list_meals_for_date(
         date = datetime.fromisoformat(date_str)
     except ValueError:
         raise HTTPException(status_code=400, detail="Ungültiges Datumsformat")
-    return get_meals_for_date(user_id, date)
+    # Die Tagesangabe ist eine lokale Europe/Berlin-Zeit (Mitternacht).
+    # Für den Vergleich in get_meals_for_date wird sie nach UTC normalisiert.
+    return _to_local_naive(get_meals_for_date(user_id, combine_local_date_time(date, None)))
+
+
 
 
 @router.post("/estimate", response_model=MealEstimate)
@@ -62,25 +81,17 @@ def create_new_meal(
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    # Datum mit Uhrzeit kombinieren (falls eine Uhrzeit extrahiert wurde)
-    # Wichtig: Die Uhrzeit wird in lokaler Zeit interpretiert, nicht in UTC.
-    # Das Frontend sendet date.toISOString() (UTC), daher müssen wir die
-    # lokale Zeitkomponente verwenden und die Uhrzeit in lokaler Zeit setzen.
-    meal_date = data.date
-    if estimate.time:
-        try:
-            hour, minute = map(int, estimate.time.split(":"))
-            # Lokale Zeitkomponente des Datums verwenden
-            if meal_date.tzinfo is not None:
-                local_date = meal_date.astimezone()
-            else:
-                local_date = meal_date
-            meal_date = local_date.replace(hour=hour, minute=minute, second=0, microsecond=0)
-        except (ValueError, TypeError):
-            pass  # Ungültige Uhrzeit – Datum unverändert lassen
-
+    # Datum mit Uhrzeit kombinieren (falls eine Uhrzeit extrahiert wurde).
+    #
+    # WICHTIG (Zeitzonen-Strategie): Die Tagesangabe (YYYY-MM-DD) und die
+    # extrahierte Uhrzeit (HH:MM) werden als lokale Europe/Berlin-Zeit
+    # interpretiert und anschließend nach UTC konvertiert. Intern wird UTC
+    # gespeichert. Der Server darf sich NICHT auf seine eigene lokale
+    # Zeitzone verlassen (Cloud Run läuft in UTC).
+    meal_date = combine_local_date_time(data.date, estimate.time)
 
     meal = Meal(
+
         id=str(uuid.uuid4()),
         user_id=user_id,
         date=meal_date,
@@ -91,7 +102,10 @@ def create_new_meal(
         fat_g=estimate.fat_g,
         provider=estimate.provider,
     )
-    return create_meal(meal)
+    created = create_meal(meal)
+    # Einheitliche API-Ausgabe: lokale Europe/Berlin-Zeit ohne Offset
+    return _to_local_naive([created])[0]
+
 
 
 @router.delete("/{meal_id}", status_code=204)

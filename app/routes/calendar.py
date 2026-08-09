@@ -13,6 +13,8 @@ from fastapi import APIRouter, Depends
 from ..auth import get_current_user_id
 from ..database import get_activities, get_events, get_meals
 from ..models import Activity, CalendarEvent, Meal
+from ..timeutil import utc_to_local_naive
+
 
 router = APIRouter(prefix="/api/calendar", tags=["calendar"])
 
@@ -21,18 +23,28 @@ MEAL_DURATION_MIN = 30
 
 
 def _activity_to_calendar_item(activity: Activity) -> dict:
-    """Wandelt eine Aktivität in ein Kalender-Item um."""
+    """Wandelt eine Aktivität in ein Kalender-Item um.
+
+    Die Ausgabe erfolgt als lokale Europe/Berlin-Zeit OHNE Offset (naive
+    lokale ISO-Zeit), damit das Frontend sie als reine lokale Darstellung
+    behandelt und keine zusätzliche Zeitzonenverschiebung verursacht.
+    """
     start = activity.start_date
     # Dauer aus elapsed_time_s (oder moving_time_s als Fallback)
     duration_s = activity.elapsed_time_s or activity.moving_time_s or 3600
     end = start + timedelta(seconds=duration_s)
 
+    # Lokale Europe/Berlin-Zeit (naive) für die Anzeige
+    start_local = utc_to_local_naive(start)
+    end_local = utc_to_local_naive(end)
+
     return {
         "id": f"activity-{activity.id}",
         "source_id": activity.id,
         "type": "activity",
-        "start": start.isoformat(),
-        "end": end.isoformat(),
+        "start": start_local.isoformat(),
+        "end": end_local.isoformat(),
+
         "title": activity.name,
         "activity_type": activity.activity_type,
         "distance_m": activity.distance_m,
@@ -47,16 +59,26 @@ def _activity_to_calendar_item(activity: Activity) -> dict:
 
 
 def _meal_to_calendar_item(meal: Meal) -> dict:
-    """Wandelt eine Mahlzeit in ein Kalender-Item um."""
+    """Wandelt eine Mahlzeit in ein Kalender-Item um.
+
+    Die Ausgabe erfolgt als lokale Europe/Berlin-Zeit OHNE Offset (naive
+    lokale ISO-Zeit), damit das Frontend sie als reine lokale Darstellung
+    behandelt und keine zusätzliche Zeitzonenverschiebung verursacht.
+    """
     start = meal.date
     end = start + timedelta(minutes=MEAL_DURATION_MIN)
+
+    # Lokale Europe/Berlin-Zeit (naive) für die Anzeige
+    start_local = utc_to_local_naive(start)
+    end_local = utc_to_local_naive(end)
 
     return {
         "id": f"meal-{meal.id}",
         "source_id": meal.id,
         "type": "meal",
-        "start": start.isoformat(),
-        "end": end.isoformat(),
+        "start": start_local.isoformat(),
+        "end": end_local.isoformat(),
+
         "title": meal.description,
         "calories": meal.calories,
         "protein_g": meal.protein_g,
@@ -72,13 +94,22 @@ def _meal_to_calendar_item(meal: Meal) -> dict:
 
 
 def _event_to_calendar_item(event: CalendarEvent) -> dict:
-    """Wandelt ein Kalender-Ereignis in ein Kalender-Item um."""
+    """Wandelt ein Kalender-Ereignis in ein Kalender-Item um.
+
+    Die Ausgabe erfolgt als lokale Europe/Berlin-Zeit OHNE Offset (naive
+    lokale ISO-Zeit), damit das Frontend sie als reine lokale Darstellung
+    behandelt und keine zusätzliche Zeitzonenverschiebung verursacht.
+    """
+    start_local = utc_to_local_naive(event.start)
+    end_local = utc_to_local_naive(event.end)
+
     return {
         "id": f"event-{event.id}",
         "source_id": event.id,
         "type": "event",
-        "start": event.start.isoformat(),
-        "end": event.end.isoformat(),
+        "start": start_local.isoformat(),
+        "end": end_local.isoformat(),
+
         "title": event.title,
         "event_type": event.event_type.value,
         "description": event.description,

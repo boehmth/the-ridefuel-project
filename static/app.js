@@ -822,10 +822,14 @@ function renderMealsPanel(container, date) {
     estimateDiv.textContent = 'KI berechnet Kalorien…';
 
     try {
+      // Lokale Tagesangabe (YYYY-MM-DD) senden, NICHT date.toISOString().
+      // toISOString() liefert UTC und verschiebt die Uhrzeit bei der Anzeige
+      // (z. B. 12:00 → 14:00), weil der Server in UTC läuft.
       const meal = await apiPost('/api/meals', {
-        date: date.toISOString(),
+        date: toISODate(date),
         description,
       });
+
       input.value = '';
       // Erfolgsmeldung kurz anzeigen
       estimateDiv.textContent = `✓ ${meal.calories} kcal geschätzt – Mahlzeit gespeichert`;

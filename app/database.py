@@ -29,6 +29,9 @@ from .models import (
     Session,
     User,
 )
+from .timeutil import ensure_utc, utc_now, utc_to_local
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +468,7 @@ def get_session(session_id: str) -> Optional[Session]:
     Liefert nur dann eine Session zurück, wenn sie existiert, nicht
     widerrufen (revoked_at IS NULL) und noch nicht abgelaufen ist.
     """
-    now = datetime.now()
+    now = utc_now()
     with _connect() as conn:
         row = conn.execute(
             """
@@ -475,6 +478,7 @@ def get_session(session_id: str) -> Optional[Session]:
             (session_id, now.isoformat()),
         ).fetchone()
     return _row_to_session(row) if row else None
+
 
 
 def get_session_raw(session_id: str) -> Optional[Session]:
@@ -495,13 +499,14 @@ def revoke_session(session_id: str) -> bool:
 
     Liefert True, wenn eine Session widerrufen wurde, sonst False.
     """
-    now = datetime.now()
+    now = utc_now()
     with _connect() as conn:
         cur = conn.execute(
             "UPDATE sessions SET revoked_at = ? WHERE id = ? AND revoked_at IS NULL",
             (now.isoformat(), session_id),
         )
     return cur.rowcount > 0
+
 
 
 def delete_expired_sessions(now: datetime) -> int:
@@ -621,8 +626,9 @@ def _row_to_activity(row: sqlite3.Row) -> Activity:
         strava_id=row["strava_id"],
         name=row["name"],
         activity_type=row["activity_type"],
-        start_date=datetime.fromisoformat(row["start_date"]),
+        start_date=ensure_utc(datetime.fromisoformat(row["start_date"])),
         distance_m=row["distance_m"],
+
         moving_time_s=row["moving_time_s"],
         elapsed_time_s=row["elapsed_time_s"],
         total_elevation_gain_m=row["total_elevation_gain_m"],
@@ -702,15 +708,16 @@ def _row_to_meal(row: sqlite3.Row) -> Meal:
     return Meal(
         id=row["id"],
         user_id=row["user_id"],
-        date=datetime.fromisoformat(row["date"]),
+        date=ensure_utc(datetime.fromisoformat(row["date"])),
         description=row["description"],
         calories=row["calories"],
         protein_g=row["protein_g"],
         carbs_g=row["carbs_g"],
         fat_g=row["fat_g"],
         provider=row["provider"],
-        created_at=datetime.fromisoformat(row["created_at"]),
+        created_at=ensure_utc(datetime.fromisoformat(row["created_at"])),
     )
+
 
 
 def get_meals(user_id: str) -> list[Meal]:
@@ -723,7 +730,12 @@ def get_meals(user_id: str) -> list[Meal]:
 
 
 def get_meals_for_date(user_id: str, date: datetime) -> list[Meal]:
-    """Liefert alle Mahlzeiten eines Benutzers für einen bestimmten Tag."""
+    """Liefert alle Mahlzeiten eines Benutzers für einen bestimmten Tag.
+
+    Der übergebene Zeitpunkt ist UTC (Mitternacht des lokalen Tages, nach
+    UTC konvertiert). Es werden alle Mahlzeiten geliefert, deren lokales
+    Europe/Berlin-Datum dem lokalen Tag des angefragten Zeitpunkts entspricht.
+    """
     # Alle Mahlzeiten des Benutzers laden und in Python filtern,
     # um Zeitzonen korrekt zu behandeln
     with _connect() as conn:
@@ -732,16 +744,14 @@ def get_meals_for_date(user_id: str, date: datetime) -> list[Meal]:
         ).fetchall()
     meals = [_row_to_meal(r) for r in rows]
 
-    # Lokales Datum des angefragten Tages
-    target_date = date.date()
+    # Lokales Datum des angefragten Tages (Europe/Berlin)
+    target_date = utc_to_local(date).date()
 
     # Mahlzeiten filtern, deren lokales Datum dem angefragten Tag entspricht
     result = []
     for meal in meals:
-        # In lokale Zeit umwandeln (falls Zeitzone vorhanden)
-        meal_local = meal.date
-        if meal_local.tzinfo is not None:
-            meal_local = meal_local.astimezone()
+        # Mahlzeit (UTC) in lokale Europe/Berlin-Zeit umwandeln
+        meal_local = utc_to_local(meal.date)
         if meal_local.date() == target_date:
             result.append(meal)
 
@@ -750,8 +760,15 @@ def get_meals_for_date(user_id: str, date: datetime) -> list[Meal]:
     return result
 
 
+
 def create_meal(meal: Meal) -> Meal:
-    """Legt eine neue Mahlzeit an."""
+    """Legt eine neue Mahlzeit an.
+
+    Der Zeitpunkt wird als UTC, timezone-aware gespeichert.
+    """
+    # Sicherstellen, dass der Zeitpunkt UTC ist (naive Werte als UTC interpretieren)
+    meal.date = ensure_utc(meal.date)
+    meal.created_at = ensure_utc(meal.created_at)
     with _connect() as conn:
         conn.execute(
             """
@@ -772,6 +789,7 @@ def create_meal(meal: Meal) -> Meal:
             ),
         )
     return meal
+
 
 
 def delete_meal(user_id: str, meal_id: str) -> bool:

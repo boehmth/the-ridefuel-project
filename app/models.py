@@ -11,6 +11,9 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
+from .timeutil import utc_now
+
+
 
 class EventType(str, Enum):
     """Die unterstützten Ereignistypen."""
@@ -145,7 +148,8 @@ class Meal(BaseModel):
     carbs_g: Optional[float] = None
     fat_g: Optional[float] = None
     provider: str = "deepseek"  # welcher KI-Provider die Schätzung gemacht hat
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=utc_now)
+
 
 
 
